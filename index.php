@@ -229,7 +229,6 @@ $app->post("/admin/forgot/reset", function(){
 
 
 });
-,
 
 
 $app->run();
