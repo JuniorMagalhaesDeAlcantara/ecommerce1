@@ -11,8 +11,52 @@ use \Hcode\Mailer;
 class User extends Model {
 
 	const SESSION = "User";
-
 	const SECRET = "HcodePhp7_Secret";
+
+    public static function getFromSession()
+    {
+
+        $user = new User();
+
+        if (isset($_SESSION[User::SESSION])  && (int)$_SESSION[User::SESSION]['iduser'] > 0){
+
+            $user->setData($_SESSION[User::SESSION]);
+        }
+
+        return $user;
+
+    }
+
+    public static function checkLogin($inadim = true)
+    {
+
+        if(
+            !isset($_SESSION[User::SESSION])
+            || 
+            !$_SESSION[User::SESSION]
+            ||
+            !(int)$_SESSION[User::SESSION]["iduser"] > 0
+         ) {
+            //Não esta logado
+            return false;
+        } else {
+
+            if ($inadim === true && (bool)$_SESSION[User::SESSION]['inadim'] === true) {
+
+                return true;
+            } else if ($inadim === false) {
+
+                return true;
+            
+            } else {
+
+                return false;
+            }
+
+        }
+
+
+    }
 
 	protected $fields = [
 		"iduser", "idperson", "deslogin", "despassword", "inadmin", "dtergister"
@@ -62,15 +106,7 @@ class User extends Model {
 	public static function verifyLogin($inadmin = true)
 	{
 
-		if (
-			!isset($_SESSION[User::SESSION])
-			|| 
-			!$_SESSION[User::SESSION]
-			||
-			!(int)$_SESSION[User::SESSION]["iduser"] > 0
-			||
-			(bool)$_SESSION[User::SESSION]["iduser"] !== $inadmin
-		) {
+		if (User::checkLogin($inadmin)) {
 			
 			header("Location: /admin/login");
 			exit;
