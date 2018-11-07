@@ -266,7 +266,7 @@ public static function formatValueToDecimal($value):float
      }
    
 
-     public static function setmsgError($msg)
+     public static function setMsgError($msg)
      {
 
         $_SESSION[Cart::SESSION_ERROR] = $msg;
