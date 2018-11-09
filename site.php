@@ -254,7 +254,7 @@ $app->post("/checkout", function(){
 
 	$cart = Cart::getFromSession();
 
-	$totals = $cart->getCalculateTotal();
+	$cart->getCalculateTotal();
 
 	$order = new Order();
 
@@ -263,7 +263,7 @@ $app->post("/checkout", function(){
 		'idaddress'=>$address->getidaddress(),
 		'iduser'=>$user->getiduser(),
 		'idstatus'=>OrderStatus::EM_ABERTO,
-		'vltotal'=>$totals['vlprice'] + $cart->getvlfreight()
+		'vltotal'=>$cart->getvltotal()
 	]);
 
 	$order->save();
@@ -538,6 +538,7 @@ $app->get("/boleto/:idorder", function($idorder){
 		$taxa_boleto = 5.00;
 		$data_venc = date("d/m/Y", time() + ($dias_de_prazo_para_pagamento * 86400));  // Prazo de X dias OU informe data: "13/04/2006"; 
 		$valor_cobrado = formatPrice($order->getvltotal()); // Valor - REGRA: Sem pontos na milhar e tanto faz com "." ou "," ou com 1 ou 2 ou sem casa decimal
+		$valor_cobrado = str_replace(".", "",$valor_cobrado);
 		$valor_cobrado = str_replace(",", ".",$valor_cobrado);
 		$valor_boleto=number_format($valor_cobrado+$taxa_boleto, 2, ',', '');
 
@@ -574,9 +575,9 @@ $app->get("/boleto/:idorder", function($idorder){
 
 
 		// DADOS DA SUA CONTA - ITAÚ
-		$dadosboleto["agencia"] = "1690"; // Num da agencia, sem digito
-		$dadosboleto["conta"] = "48781";	// Num da conta, sem digito
-		$dadosboleto["conta_dv"] = "2"; 	// Digito do Num da conta
+		$dadosboleto["agencia"] = "0367"; // Num da agencia, sem digito
+		$dadosboleto["conta"] = "07968";	// Num da conta, sem digito
+		$dadosboleto["conta_dv"] = "8"; 	// Digito do Num da conta
 
 		// DADOS PERSONALIZADOS - ITAÚ
 		$dadosboleto["carteira"] = "175";  // Código da Carteira: pode ser 175, 174, 104, 109, 178, ou 157
@@ -597,5 +598,46 @@ $app->get("/boleto/:idorder", function($idorder){
 
 });
 
+
+$app->get("/profile/orders", function(){
+
+	User::verifyLogin(false);
+
+	$user = User::getFromSession();
+
+	$page = new Page();
+
+	$page->setTpl("profile-orders",[
+		'orders'=>$user->getOrders()
+
+	]);
+
+
+});
+
+$app->get("/profile/orders/:idorder", function($idorder){
+
+	User::verifyLogin(false);
+
+	$order = new Order();
+
+	$order->get((int)$idorder);
+
+	$cart = new Cart();
+
+	$cart->get((int)$order->getidcart());
+
+	$cart->getCalculateTotal();
+
+	$page = new Page();
+
+	$page->setTpl("profile-orders-detail",[
+		'order'=>$order->getValues(),
+		'cart'=>$cart->getValues(),
+		'products'=>$cart->getProducts(),
+
+	]);
+
+});
 
 ?>
