@@ -23,7 +23,7 @@ class Product extends Model {
 
                foreach ($list as &$row) {
                 
-                $p= new Product();
+                $p = new Product();
                 $p->setData($row);
                 $row = $p->getValues();
 

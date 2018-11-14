@@ -14,6 +14,7 @@
         <input name="itemWeigh<?php echo htmlspecialchars( $counter1+1, ENT_COMPAT, 'UTF-8', FALSE ); ?> type="hidden" value="<?php echo htmlspecialchars( $value1["vlweight"]*1000, ENT_COMPAT, 'UTF-8', FALSE ); ?>">  
         <?php } ?>
   
+        <input name="itemShippingCost1" type="hidden" value="<?php echo htmlspecialchars( $order["vlfreight"], ENT_COMPAT, 'UTF-8', FALSE ); ?>"> 
         <!-- Código de referência do pagamento no seu sistema (opcional) -->  
         <input name="reference" type="hidden" value="<?php echo htmlspecialchars( $order["idorder"], ENT_COMPAT, 'UTF-8', FALSE ); ?>">  
           

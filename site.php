@@ -9,6 +9,8 @@ use \Hcode\Model\User;
 use \Hcode\Model\Order;
 use \Hcode\Model\OrderStatus;
 
+
+
 $app->get('/', function() {
 
 	$products = Product::listAll();
@@ -20,6 +22,58 @@ $app->get('/', function() {
     )]);
 	
 });
+
+$app->get("/products", function(){
+
+	User::verifyLogin();
+
+
+
+	$search = (isset($_GET['search'])) ? $_GET['search'] : "";
+	$page = (isset($_GET['page'])) ? (int)$_GET['page'] : 1;
+
+
+
+	if ($search != '') {
+
+		$pagination = Product::getPageSearch($search, $page);
+		
+
+	} else {
+
+		$pagination = Product::getPage($page);
+
+
+	}
+
+	$pages = [];
+
+	for ($x = 0; $x < $pagination['pages']; $x++)
+	{
+
+		array_push($pages, [
+			'href'=>'/products?'.http_build_query([
+				'page'=>$x+1,
+				'search'=>$search
+			]),
+			'text'=>$x+1
+		]);
+
+	}
+
+	$page = new Page();
+
+
+  	$page->setTpl("products", [
+  		
+		"products"=>$pagination['data'],
+			"search"=>$search,
+			"pages"=>$pages,
+			]);
+
+});
+
+
 
 $app->get("/categories/:idcategory", function($idcategory){
 
@@ -274,12 +328,18 @@ $app->post("/checkout", function(){
 			header("Location: /order/".$order->getidorder()."/pagseguro");
 			break;
 		
-		default:
+		case 2:
 			header("Location: /order/".$order->getidorder()."/paypal");
 			break;
+
+		case 3:
+			header("Location: /boleto/".$order->getidorder().":idorder");
+			break;	
 	}
 
 	exit;
+	
+
 	
 });	
 
@@ -310,6 +370,7 @@ $app->get("/order/:idorder/pagseguro", function($idorder){
 	]);
 
 });
+
 
 
 $app->get("/order/:idorder/paypal", function($idorder){
@@ -598,7 +659,7 @@ $app->get("/boleto/:idorder", function($idorder){
 
 			// DADOS DO BOLETO PARA O SEU CLIENTE
 		$dias_de_prazo_para_pagamento = 10;
-		$taxa_boleto = 5.00;
+		$taxa_boleto = 0.00;
 		$data_venc = date("d/m/Y", time() + ($dias_de_prazo_para_pagamento * 86400));  // Prazo de X dias OU informe data: "13/04/2006"; 
 		$valor_cobrado = formatPrice($order->getvltotal()); // Valor - REGRA: Sem pontos na milhar e tanto faz com "." ou "," ou com 1 ou 2 ou sem casa decimal
 		$valor_cobrado = str_replace(".", "",$valor_cobrado);
@@ -716,6 +777,7 @@ $app->get("/profile/change-password", function(){
 
 });
 
+
 $app->post("/profile/change-password", function(){
 
 	User::verifyLogin(false);
@@ -778,5 +840,6 @@ $app->post("/profile/change-password", function(){
 
 	header("Location: /profile/change-password");
 	exit;
+
 
 });
