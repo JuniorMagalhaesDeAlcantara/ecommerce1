@@ -9,9 +9,9 @@
         {loop="$products"} 
         <input name="itemId{$counter+1}" type="hidden" value="{$value.idproduct}">  
         <input name="itemDescription{$counter+1}" type="hidden" value="{$value.desproduct}">  
-        <input name="itemAmoun{$counter+1} type="hidden" value="{$value.vltotal}">  
-        <input name="itemQuantit{$counter+1} type="hidden" value="{value.nrqtd}">  
-        <input name="itemWeigh{$counter+1} type="hidden" value="{$value.vlweight*1000}">  
+        <input name="itemAmount{$counter+1}" type="hidden" value="{$value.vltotal}">  
+        <input name="itemQuantity{$counter+1}" type="hidden" value="{$value.nrqtd}">  
+        <input name="itemWeigh{$counter+1}" type="hidden" value="{$value.vlweight*1000}">  
         {/loop}
   
         <input name="itemShippingCost1" type="hidden" value="{$order.vlfreight}"> 

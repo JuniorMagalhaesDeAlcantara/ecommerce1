@@ -40,7 +40,7 @@ class Product extends Model {
 
         $sql = new Sql();
 
-            $results = $sql->select("CALL sp_products_save(:idproduct, :desproduct, :vlprice, :vlwidth, :vlheight, :vllength, :vlweight, :desurl)", array(
+            $results = $sql->select("CALL sp_products_save(:idproduct, :desproduct, :vlprice, :vlwidth, :vlheight, :vllength, :vlweight, :desurl, :desdescription)", array(
                 ":idproduct"=>$this->getidproduct(),
                 ":desproduct"=>$this->getdesproduct(),
                 ":vlprice"=>$this->getvlprice(),
@@ -48,7 +48,8 @@ class Product extends Model {
                 ":vlheight"=>$this->getvlheight(),
                 ":vllength"=>$this->getvllength(),
                 ":vlweight"=>$this->getvlweight(),
-                ":desurl"=>$this->getdesurl()
+                ":desurl"=>$this->getdesurl(),
+                ":desdescription"=>$this->getdesdescription()
                
 ));
 
@@ -193,6 +194,12 @@ class Product extends Model {
 
         $resultTotal = $sql->select("SELECT FOUND_ROWS() AS nrtotal;");
 
+        foreach ($results as &$result) {
+            
+        $result['desphoto'] = "/res/site/img/products/" .$result['idproduct'] . ".jpg";
+ 
+        }
+
         return [
             'data'=>$results,
             'total'=>(int)$resultTotal[0]["nrtotal"],
@@ -219,6 +226,12 @@ class Product extends Model {
         ]);
 
         $resultTotal = $sql->select("SELECT FOUND_ROWS() AS nrtotal;");
+
+        foreach ($results as &$result) {
+            
+        $result['desphoto'] = "/res/site/img/products/" .$result['idproduct'] . ".jpg";
+ 
+        }
 
         return [
             'data'=>$results,

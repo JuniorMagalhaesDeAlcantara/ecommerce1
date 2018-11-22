@@ -23,7 +23,7 @@
         </div>
         <!-- /.box-header -->
         <!-- form start -->
-        <form role="form" action="/admin/products/create" method="post">
+        <form role="form" action="/admin/products/create" method="post" enctype="multipart/form-data">
           <div class="box-body">
             <div class="form-group">
               <label for="desproduct">Nome da produto</label>
@@ -55,6 +55,17 @@
               <input type="text" class="form-control" id="desurl" name="desurl" >
             </div>
           </div>
+
+          <div class="form-group">
+              <label for="desdescription">Descrição do Produto</label>
+              <input type= "text" class="form-control" id="desdescription" name="desdescription" placeholder="Descrição">
+          </div>
+
+          <div class="form-group">
+               <label for="file">Foto</label>
+               <input type="file" class="form-control" id="file" name="file">              
+          </div>
+
           <!-- /.box-body -->
           <div class="box-footer">
             <button type="submit" class="btn btn-success">Cadastrar</button>
