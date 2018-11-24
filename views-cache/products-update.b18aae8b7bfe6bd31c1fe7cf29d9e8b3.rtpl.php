@@ -44,6 +44,10 @@
               <label for="vlweight">Peso</label>
               <input type="number" class="form-control" id="vlweight" name="vlweight" step="0.01" placeholder="0.00" value="<?php echo htmlspecialchars( $product["vlweight"], ENT_COMPAT, 'UTF-8', FALSE ); ?>">
             </div>
+            <div class="form-group">
+              <label for="desdescription">Descrição do Produto</label>
+              <textarea class="form-control" id="desdescription" name="desdescription" placeholder="Descrição"><?php echo htmlspecialchars( $product["desdescription"], ENT_COMPAT, 'UTF-8', FALSE ); ?></textarea>
+            </div>
               <div class="form-group">
               <label for="file">Foto</label>
               <input type="file" class="form-control" id="file" name="file" value="<?php echo htmlspecialchars( $product["vlweight"], ENT_COMPAT, 'UTF-8', FALSE ); ?>">
